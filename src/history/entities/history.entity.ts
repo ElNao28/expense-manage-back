@@ -4,7 +4,9 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class History {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+  @Column({
+    type: 'decimal',
+  })
   amount: number;
   @Column({
     name: 'movement_date',

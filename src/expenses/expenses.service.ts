@@ -5,17 +5,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Expense } from './entities/expense.entity';
 import { Repository } from 'typeorm';
 import { HandlerResponse } from 'src/helpers/Handler-Response.helper';
+import { History } from 'src/history/entities/history.entity';
 
 @Injectable()
 export class ExpensesService {
   constructor(
     @InjectRepository(Expense)
     private readonly expenseRepository: Repository<Expense>,
+    @InjectRepository(History)
+    private readonly historyRepository: Repository<History>,
   ) {}
   public async create(createExpenseDto: CreateExpenseDto) {
     try {
       const newExpense = this.expenseRepository.create(createExpenseDto);
       const saveExpense = await this.expenseRepository.save(newExpense);
+      await this.createHistory(saveExpense);
       return new HandlerResponse(
         'Register success',
         HttpStatus.OK,
@@ -39,15 +43,15 @@ export class ExpensesService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} expense`;
-  }
-
-  update(id: number, updateExpenseDto: UpdateExpenseDto) {
-    return `This action updates a #${id} expense`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} expense`;
+  private async createHistory(expense: Expense): Promise<void> {
+    try {
+      const newRegister = this.historyRepository.create({
+        amount: expense.amount,
+        movementDate: expense.purchaseDate,
+      });
+      await this.historyRepository.save(newRegister);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
