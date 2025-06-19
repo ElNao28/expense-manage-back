@@ -10,6 +10,9 @@ export class Expense {
     name: 'purchase_date',
   })
   purchaseDate: Date;
-  @Column()
+  @Column({
+    type:'decimal',
+    nullable:true
+  })
   amount: number;
 }

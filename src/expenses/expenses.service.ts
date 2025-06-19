@@ -16,19 +16,27 @@ export class ExpensesService {
     try {
       const newExpense = this.expenseRepository.create(createExpenseDto);
       const saveExpense = await this.expenseRepository.save(newExpense);
-      const response = new HandlerResponse(
+      return new HandlerResponse(
         'Register success',
         HttpStatus.OK,
         saveExpense,
       );
-      return response;
     } catch (error) {
       console.log(error);
     }
   }
 
-  findAll() {
-    return `This action returns all expenses`;
+  public async findAll() {
+    try {
+      const findAllRegisters = await this.expenseRepository.find();
+      return new HandlerResponse(
+        'Find registers',
+        HttpStatus.OK,
+        findAllRegisters,
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findOne(id: number) {

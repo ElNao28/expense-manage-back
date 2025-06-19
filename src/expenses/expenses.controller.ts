@@ -20,7 +20,7 @@ export class ExpensesController {
     return this.expensesService.create(createExpenseDto);
   }
 
-  @Get()
+  @Get('list')
   findAll() {
     return this.expensesService.findAll();
   }
